@@ -50,6 +50,13 @@ app.on('activate', () => {
 ipcMain.on('login-user', (event, val) => {
   console.log(val);
   event.sender.send('login-callback', { status: 'success' });
+
+  win = new BrowserWindow(bwOption);
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, 'html/main.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
 });
 
 ipcMain.on('closing-login-window', (event) => {
