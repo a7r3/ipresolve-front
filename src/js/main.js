@@ -58,7 +58,6 @@ function wsMessageHandler (incomingMessage) {
 }
 
 function incomingReqHandler (incomingReq) {
-  log('request in here');
   // REQUEST OBJECT PROPERTIES
   // type
   // reqId
@@ -73,8 +72,7 @@ function incomingReqHandler (incomingReq) {
     headers: incomingReq.headers,
     method: incomingReq.method,
   };
-  outgoingReqOptions.headers.host = hostname+':'+port;
-  log(outgoingReqOptions);
+  delete outgoingReqOptions.headers.host;
   // log(typeof incomingReq.headers, incomingReq.headers);
 
   const outgoingReq = http.request(outgoingReqOptions, (incomingRes) => {
@@ -88,14 +86,20 @@ function incomingReqHandler (incomingReq) {
     let data = '';
 
     incomingRes.on('data', (chunk) => {
-      log('getting chunks');
       data += chunk;
-      log(chunk);
     });
 
     incomingRes.on('end', () => {
-      console.log(data.toString());
-      ws.send(data);
+      // console.log(data.toString());
+      const outgoingRes = {
+        reqId: incomingReq.reqId,
+        headers: incomingRes.headers,
+        statusCode: incomingRes.statusCode,
+        statusMessage: incomingRes.statusMessage,
+        data: data
+      }
+      ws.send(JSON.stringify(outgoingRes));
+      log(outgoingRes);
     });
   });
 

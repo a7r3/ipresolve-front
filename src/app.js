@@ -1,13 +1,10 @@
 const path = require('path');
 const url = require('url');
-const fs = require('fs');
 
 const electron = require('electron');
 const { app, BrowserWindow } = electron;
 
-// ipcMain to communicate between main and renderer process
-const { ipcMain } = electron;
-let win;
+let win = null;
 
 // create the browser window option
 let bwOption = {
@@ -25,7 +22,7 @@ function createWindow() {
   win = new BrowserWindow(bwOption);
 
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'html/index.html'),
+    pathname: path.join(__dirname, 'html/main.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -47,29 +44,3 @@ app.on('activate', () => {
     createWindow();
 });
 
-ipcMain.on('login-user', (event, val) => {
-  console.log(val);
-  event.sender.send('login-callback', { status: 'success' });
-
-  win = new BrowserWindow(bwOption);
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'html/main.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-});
-
-ipcMain.on('closing-login-window', (event) => {
-
-});
-
-// const exec = require('child_process').exec;
-
-// const yourscript = exec('sh start.sh',
-//   (error, stdout, stderr) => {
-//     console.log(stdout);
-//     console.log(stderr);
-//     if (error !== null) {
-//       console.log(`exec error: ${error}`);
-//     }
-//   });
