@@ -85,8 +85,6 @@ function incomingReqHandler (incomingReq) {
 
     let data = '';
 
-    incomingReq.on('headers')
-
     incomingRes.on('data', (chunk) => {
       data += chunk;
     });
@@ -98,8 +96,7 @@ function incomingReqHandler (incomingReq) {
         reqId: incomingReq.reqId,
         headers: incomingRes.headers,
         statusCode: incomingRes.statusCode,
-        statusMessage: incomingRes.statusMessage,
-        data: data
+        statusMessage: incomingRes.statusMessage
       };
       ws.send(JSON.stringify(outgoingRes));
       log(outgoingRes);
