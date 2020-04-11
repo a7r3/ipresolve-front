@@ -104,7 +104,7 @@ function incomingReqHandler (incomingReq) {
       ws.send(JSON.stringify(outgoingRes));
       log(outgoingRes);
 
-      let outgoingRes = {
+      outgoingRes = {
         type: 'body',
         reqId: incomingReq.reqId,
         data: data
