@@ -85,19 +85,30 @@ function incomingReqHandler (incomingReq) {
 
     let data = '';
 
+    incomingReq.on('headers')
+
     incomingRes.on('data', (chunk) => {
       data += chunk;
     });
 
     incomingRes.on('end', () => {
       // console.log(data.toString());
-      const outgoingRes = {
+      let outgoingRes = {
+        type: 'headers',
         reqId: incomingReq.reqId,
         headers: incomingRes.headers,
         statusCode: incomingRes.statusCode,
         statusMessage: incomingRes.statusMessage,
         data: data
-      }
+      };
+      ws.send(JSON.stringify(outgoingRes));
+      log(outgoingRes);
+
+      let outgoingRes = {
+        type: 'body',
+        reqId: incomingReq.reqId,
+        data: data
+      };
       ws.send(JSON.stringify(outgoingRes));
       log(outgoingRes);
     });
