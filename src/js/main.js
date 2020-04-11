@@ -20,7 +20,7 @@ startButton.addEventListener('click', () => {
   log({hostname, port});
 
   log('Starting WebSocket connection...');
-  ws = new WebSocket('ws://localhost:8080');
+  ws = new WebSocket('ws://ipresolver.eastus.cloudapp.azure.com:8080');
   
   log('Registring client...');
   ws.on('open', () => {
