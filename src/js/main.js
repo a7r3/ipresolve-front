@@ -108,6 +108,13 @@ function incomingReqHandler (incomingReq) {
       };
       ws.send(JSON.stringify(outgoingRes));
       log(outgoingRes);
+
+      outgoingRes = {
+        type: 'end',
+        reqId: incomingReq.reqId,
+      };
+      ws.send(JSON.stringify(outgoingRes));
+      log(outgoingRes);
     });
   });
 
